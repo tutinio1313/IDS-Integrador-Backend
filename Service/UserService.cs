@@ -5,11 +5,18 @@ namespace IDS_Integrador.Service
 {
     public static class UserService
     {
-        public static Task<UserLoginResponse> Login(UserLoginModel model)
+        public static UserLoginResponse Login(UserLoginModel model)
         {
             UserLoginResponse response = new();
 
-            return Task.FromResult(response);
+            return response;
+        }
+
+        public static UserRegisterResponse Register(UserRegisterModel model)
+        {
+            UserRegisterResponse response = new();
+
+            return response;
         }  
         
     }

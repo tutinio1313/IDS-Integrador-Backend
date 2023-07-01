@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Identity;
 using IDS_Integrador.Model.Entity;
 
 #pragma warning disable CS8618
-namespace IDS_Integrador
+namespace IDS_Integrador.Database
 {
-    public class dbContext : IdentityDbContext<IdentityUser>
+    public class IDSBContext : IdentityDbContext<User>
     {
-        public dbContext(DbContextOptions options) : base(options){}    
-        public DbSet<User> Empleados {get; set;}
-        public DbSet<IdentityRole> Roles {get; set;}
+        public IDSBContext(DbContextOptions options) : base(options){}    
+        public DbSet<User> Users {get; set;}
+        public DbSet<Role> Roles {get; set;}
     }
 }

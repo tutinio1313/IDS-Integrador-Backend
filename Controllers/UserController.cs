@@ -17,20 +17,39 @@ namespace IDS_Integrador.Controllers
 
 
         [HttpPost]
-        [Route("*/Login/{key}")]
-        public Task<UserLoginResponse> Login(UserLoginModel model)
+        [Route("*/Login?key:{key}")]
+        public Task<UserLoginResponse> LoginThroughKey(UserLoginModel model)
         {
-            if(ModelState.IsValid)
-            {
-                 return UserService.Login(model);
-            }
             UserLoginResponse response = new();
 
-            response.MessageErrorHandler();
+            if(ModelState.IsValid)
+            {
+                response = UserService.Login(model);
+            }
+            else
+            {
+            response.StateExecution = false;
+            response.MessageErrorHandler(0);
+            }
+            
 
             return Task.FromResult(response);
         }
 
-
+        [HttpPost]
+        public Task<UserRegisterResponse> Register(UserRegisterModel model)
+        {
+        UserRegisterResponse response = new();
+            if(ModelState.IsValid)
+            {
+                response = UserService.Register(model);
+            }
+            else
+            {
+                response.StateExecution = false;
+                response.MessageErrorHandler(0);
+            }
+            return Task.FromResult(response);
+        }
     }
 }

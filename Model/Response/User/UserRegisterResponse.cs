@@ -2,7 +2,7 @@ using IDS_Integrador.Model.Response;
 
 namespace IDS_Integrador.Model.Response.User
 {
-    public class UserLoginResponse : Response
+    public class UserRegisterResponse : Response
     {
         private enum ErrorTypes
         {
@@ -18,6 +18,6 @@ namespace IDS_Integrador.Model.Response.User
                 Messages.Add("The payload is not compatible!");
                 break;
             }
-        }          
+        }         
     }
 }
