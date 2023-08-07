@@ -17,7 +17,7 @@ namespace IDS_Integrador.Controllers
 
 
         [HttpPost]
-        [Route("*/Login?key:{key}")]
+        [Route("/Login")]
         public Task<UserLoginResponse> LoginThroughKey(UserLoginModel model)
         {
             UserLoginResponse response = new();
@@ -37,6 +37,7 @@ namespace IDS_Integrador.Controllers
         }
 
         [HttpPost]
+        [Route("/Register")]
         public Task<UserRegisterResponse> Register(UserRegisterModel model)
         {
         UserRegisterResponse response = new();

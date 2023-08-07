@@ -9,7 +9,18 @@ namespace IDS_Integrador.Database
 {
     public class IDSBContext : IdentityDbContext<User>
     {
-        public IDSBContext(DbContextOptions options) : base(options){}    
+        public IDSBContext(DbContextOptions<IDSBContext> options) : base(options){}
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            optionsBuilder.UseMySql(ConnectionString,version);
+        }
+
+        private string ConnectionString = "Server=localhost;Database=ids;Uid=root;Pwd=tuti1313;SslMode=Preferred;";
+         //private MySqlServerVersion versionMySQL = new(8, 0,33);
+        private MariaDbServerVersion version = new(new Version(10, 6, 12));
         public DbSet<User> Users {get; set;}
         public DbSet<Role> Roles {get; set;}
     }
