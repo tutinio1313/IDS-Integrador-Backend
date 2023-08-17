@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+
+using IDS_Integrador.Database;
 using IDS_Integrador.Model.Entity;
 using IDS_Integrador.Model.Response.User;
-using IDS_Integrador.Service;
 using IDS_Integrador.Model.Request.User;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace IDS_Integrador.Controllers
 {
@@ -13,44 +15,121 @@ namespace IDS_Integrador.Controllers
     {
 
         private readonly ILogger<UserController> _logger;
-        public UserController(ILogger<UserController> logger) {_logger = logger;}
-
-
-        [HttpPost]
-        [Route("/Login")]
-        public Task<UserLoginResponse> LoginThroughKey(UserLoginModel model)
+        private UserManager<User> UserManager;
+        private SignInManager<User> SignInManager;
+        public UserController(ILogger<UserController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            UserLoginResponse response = new();
-
-            if(ModelState.IsValid)
-            {
-                response = UserService.Login(model);
-            }
-            else
-            {
-            response.StateExecution = false;
-            response.MessageErrorHandler(0);
-            }
-            
-
-            return Task.FromResult(response);
+            _logger = logger;
+            UserManager = userManager;
+            SignInManager = signInManager;
         }
 
         [HttpPost]
-        [Route("/Register")]
-        public Task<UserRegisterResponse> Register(UserRegisterModel model)
+        [Route("/User/Login")]
+        public async Task<UserLoginResponse> Login(UserLoginModel model)
         {
-        UserRegisterResponse response = new();
-            if(ModelState.IsValid)
+            UserLoginResponse response = new();
+
+            if (ModelState.IsValid)
             {
-                response = UserService.Register(model);
+                
             }
             else
             {
+                HttpContext.Response.StatusCode = 422;
                 response.StateExecution = false;
-                response.MessageErrorHandler(0);
+                response.MessageHandler(0);
             }
-            return Task.FromResult(response);
+
+
+            return response;
+        }
+        [HttpPost]
+        [Route("/User/LoginKey")]
+        public async Task<UserLoginResponse> LoginThroughKey(UserLoginKeyModel model)
+        {
+            UserLoginResponse response = new();
+
+
+            if (ModelState.IsValid)
+            {
+                
+
+                if (response.Messages.Count is not 0)
+                {
+
+                }
+
+                else
+                {
+                    HttpContext.Response.StatusCode = 200;
+                    response.StateExecution = true;
+
+                }
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = 422;
+                response.StateExecution = false;
+                response.MessageHandler(0);
+            }
+
+
+
+            return response;
+        }
+
+        [HttpPost]
+        [Route("/User/Register")]
+        public async Task<UserRegisterResponse> Register(UserRegisterModel model)
+        {
+            UserRegisterResponse response = new();
+            if (ModelState.IsValid)
+            {
+
+                User IsEmailAvailable = await UserManager.FindByEmailAsync(model.Email);;
+                User IsUsernameAvailable = await UserManager.FindByNameAsync(model.Username);
+
+                if (IsEmailAvailable == null && IsUsernameAvailable == null)
+                {
+                    User user = new();
+
+                    user.UserName = model.Username;
+                    user.Email = model.Email;
+                    user.Name = model.Name;
+                    user.Lastname = model.Lastname;
+
+
+                    IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+                    if(result.Succeeded)
+                    {
+                        response.StateExecution = true;
+                        response.MessageHandler(5);
+                    }
+
+                }
+                else
+                {
+                    response.StateExecution = false;
+
+                    if (IsEmailAvailable != null)
+                    {
+                        response.MessageHandler(1);
+                    }
+                    if (IsUsernameAvailable != null)
+                    {
+                        response.MessageHandler(2);
+                    }
+                }
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = 422;
+                response.StateExecution = false;
+                response.MessageHandler(0);
+            }
+            return response;
         }
     }
 }

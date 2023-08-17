@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using IDS_Integrador.Model.Entity;
 using IDS_Integrador.Database;
-using IDS_Integrador.Service;
 
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
@@ -24,23 +23,25 @@ builder.Services.AddDbContext<IDSBContext>
                     .EnableDetailedErrors()
     );
 
-
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
 
-builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<IDSBContext>();
+builder.Services.AddIdentity<User, Role>( options => 
+                                        {
+                                            options.Password.RequiredLength = 8; 
+                                            options.Password.RequiredUniqueChars = 0;
+                                            options.Password.RequireNonAlphanumeric = false;
+                                            options.Password.RequiredUniqueChars = 0;
+                                            options.Password.RequireLowercase = false;
+                                            options.Password.RequireUppercase = false;
+                                        })
+                                        .AddEntityFrameworkStores<IDSBContext>();
 
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<RoleManager<Role>>();
 
 var app = builder.Build();
-if (builder.Environment.IsDevelopment())
-{
-    
-    
-    
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,11 +50,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
+
 
 app.Run();

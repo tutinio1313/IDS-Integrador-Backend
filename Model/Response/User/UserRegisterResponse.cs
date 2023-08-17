@@ -7,15 +7,29 @@ namespace IDS_Integrador.Model.Response.User
         private enum ErrorTypes
         {
             ModelIsNotValid,
-
+            TheEmailIsNotAvailable,
+            TheUsernameIsNotAvailable,
+            RegisteredSuccesful
         }
 
-        public void MessageErrorHandler(int ErrorValue)
+        public void MessageHandler(int ErrorValue)
         {
             switch(ErrorValue)
             {
                 case (int) ErrorTypes.ModelIsNotValid:
-                Messages.Add("The payload is not compatible!");
+                Messages.Add("¡El payload no es compatible!");
+                break;
+
+                case (int) ErrorTypes.TheEmailIsNotAvailable:
+                Messages.Add("¡El email ya se ha registrado previamente!");
+                break;
+
+                case (int) ErrorTypes.TheUsernameIsNotAvailable:
+                Messages.Add("¡El usuario ya se ha registrado previamente!");
+                break;
+
+                default:
+                Messages.Add("¡El usuario se ha registrado satisfactoriamente!");
                 break;
             }
         }         

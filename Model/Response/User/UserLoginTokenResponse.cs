@@ -2,13 +2,13 @@ using IDS_Integrador.Model.Response;
 
 namespace IDS_Integrador.Model.Response.User
 {
-    public class UserLoginResponse : Response
+    public class UserLoginTokenResponse : Response
     {
         private enum ErrorTypes
         {
             ModelIsNotValid,
-            TheEmailIsNotRegistered,
-            TheUsernameIsNotRegistered
+            TheTokenIsNotValid,
+            TheTokenIsExpired,
 
         }
 
@@ -20,12 +20,12 @@ namespace IDS_Integrador.Model.Response.User
                 Messages.Add("¡El payload no es compatible!");
                 break;
 
-                case (int) ErrorTypes.TheEmailIsNotRegistered:
-                Messages.Add("¡El email no esta registrado!");
+                case (int) ErrorTypes.TheTokenIsNotValid:
+                Messages.Add("¡El token no es valido!");
                 break;
 
-                case (int) ErrorTypes.TheUsernameIsNotRegistered:
-                Messages.Add("¡El payload no esta registrado!");
+                case (int) ErrorTypes.TheTokenIsExpired:
+                Messages.Add("¡El token ha expirado!");
                 break;
             }
         }          
