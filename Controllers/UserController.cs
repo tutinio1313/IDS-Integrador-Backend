@@ -87,8 +87,8 @@ namespace IDS_Integrador.Controllers
             if (ModelState.IsValid)
             {
 
-                User IsEmailAvailable = await UserManager.FindByEmailAsync(model.Email);;
-                User IsUsernameAvailable = await UserManager.FindByNameAsync(model.Username);
+                User? IsEmailAvailable = await UserManager.FindByEmailAsync(model.Email);;
+                User? IsUsernameAvailable = await UserManager.FindByNameAsync(model.Username);
 
                 if (IsEmailAvailable == null && IsUsernameAvailable == null)
                 {
