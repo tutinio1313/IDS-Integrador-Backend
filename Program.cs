@@ -23,6 +23,14 @@ builder.Services.AddDbContext<IDSBContext>
                     .EnableDetailedErrors()
     );
 
+    builder.Services.AddDbContext<TeamContext>
+    (
+        contextOptions => contextOptions.UseMySql(builder.Configuration["ConnectionStrings:Default"], version)
+                    .LogTo(Console.WriteLine, LogLevel.Information)
+                    .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors()
+    );
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 

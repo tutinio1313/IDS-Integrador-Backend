@@ -51,10 +51,8 @@ namespace IDS_Integrador.Controllers
                     {
                         Team team = new
                             (
-                            context.Teams.Count(),
-                            model.Name,
-                            model.UrlImage
-                            );
+
+                            ) { Name = model.Name, UrlImage = model.UrlImage};
                             var AddResult = await context.Teams.AddAsync(team);
 
                             if(AddResult != null)

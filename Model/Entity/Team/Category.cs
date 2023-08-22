@@ -1,14 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+
 namespace IDS_Integrador.Model.Entity.Team
 {
     public class Category
     {
-        public int ID {get; set;}
-        public string Name {get; set;} = string.Empty;
-
-        public Category(int ID, string Name)
-        {
-            this.ID = ID;
-            this.Name = Name;            
-        }          
+        [Key]
+        public string IdCategory { get; set;}
+        public string Name {get; set;}
     }
 }

@@ -11,14 +11,13 @@ namespace IDS_Integrador.Database
     {
         public IDSBContext(DbContextOptions<IDSBContext> options) : base(options){}
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
             optionsBuilder.UseMySql(ConnectionString,version);
         }
 
-        private string ConnectionString = "Server=localhost;Database=ids;Uid=root;Pwd=tuti1313;SslMode=Preferred;";
+        private string ConnectionString = "Server=localhost;Database=ids;Uid=tuti;Pwd=tuti1313;SslMode=Preferred;";
         private MariaDbServerVersion version = new(new Version(10, 6, 12));
         public DbSet<User> Users {get; set;}
         public DbSet<Role> Roles {get; set;}

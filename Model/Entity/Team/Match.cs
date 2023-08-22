@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace IDS_Integrador.Model.Entity.Team
 {
     public class Match
     {
-        public int ID { get; set; }
+        [Key]
+        public string IDMatch {get; set;}
         public DateTime Date { get; set; }
         public Team LocalTeam {get; set;}
         public Team VisitTeam {get; set;}
