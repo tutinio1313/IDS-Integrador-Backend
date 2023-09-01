@@ -8,8 +8,7 @@ namespace IDS_Integrador.Model.Response.Team
         private enum ErrorTypes
         {
             ThereIsNotTeams,
-            
-
+            GetSuccesfullyTeam
         }
 
         public List<IDS_Integrador.Model.Entity.Team.Team>? Teams {get;set;}
@@ -20,6 +19,12 @@ namespace IDS_Integrador.Model.Response.Team
             {
                 case (int) ErrorTypes.ThereIsNotTeams:
                 Messages.Add("¡No hay equipos cargados!");
+                StateExecution = false;
+                break;
+
+                case (int) ErrorTypes.GetSuccesfullyTeam:
+                Messages.Add("Los archivos se entregaron correctamente");
+                StateExecution = true;
                 break;
             }
         }          

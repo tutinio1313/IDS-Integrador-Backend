@@ -3,7 +3,8 @@ using IDS_Integrador.Model.Entity.Team;
 using IDS_Integrador.Database;
 using IDS_Integrador.Model.Response.Team;
 using IDS_Integrador.Model.Request.Team;
-
+using Microsoft.AspNetCore.Authorization;
+using System.Text;
 
 namespace IDS_Integrador.Controllers
 {
@@ -14,23 +15,23 @@ namespace IDS_Integrador.Controllers
 
         private readonly ILogger<TeamController> _logger;
         private readonly TeamContext context;
-        public TeamController(ILogger<TeamController> logger, TeamContext context) {_logger = logger; this.context = context; }
+        public TeamController(ILogger<TeamController> logger, TeamContext context) { _logger = logger; this.context = context; }
 
 
         [HttpGet]
         public GetTeamsResponse GetTeams()
         {
             GetTeamsResponse response = new();
-            
-            if(context.Teams.Count() > 0)
+
+            if (context.Teams.Count() > 0)
             {
                 response.Teams = context.Teams.ToList();
-                response.StateExecution = true;
+                response.MessageHandler(1);
             }
             else
             {
                 response.StateExecution = false;
-                response.MessageHandler(0);                
+                response.MessageHandler(0);
             }
             return response;
         }
@@ -39,40 +40,40 @@ namespace IDS_Integrador.Controllers
         public async Task<PostTeamResponse> Post(TeamPostModel model)
         {
             PostTeamResponse response = new();
-
-            if(ModelState.IsValid)
+            response.Messages.Add("a");
+            if (ModelState.IsValid)
             {
-                bool IsNameValid = String.IsNullOrEmpty(model.Name) && String.IsNullOrWhiteSpace(model.Name);
-                bool IsUrlValid = String.IsNullOrEmpty(model.UrlImage) && String.IsNullOrWhiteSpace(model.UrlImage);
+                response.Messages.Add("b");
+                bool IsNameValid = !String.IsNullOrEmpty(model.Name);
+                bool IsUrlValid = !String.IsNullOrEmpty(model.UrlImage);
 
-                if(IsNameValid && IsUrlValid)
+                if (IsNameValid && IsUrlValid)
                 {
-                    if(context.Teams.Where(x => x.Name.ToLower() == model.Name.ToLower()).Count() == 0)
-                    {
-                        Team team = new
-                            (
+                    //if (context.Teams.Where(x => x.Name.ToLower() == model.Name.ToLower()).Count().Equals(0))
+                    //{
+                        Team team = new();
+                        team.IDTeam =  (context.Teams.Count() + 1).ToString();
+                        team.Name = model.Name;
+                        team.UrlImage = model.UrlImage;
+                        var AddResult = await context.Teams.AddAsync(team);
 
-                            ) { Name = model.Name, UrlImage = model.UrlImage};
-                            var AddResult = await context.Teams.AddAsync(team);
-
-                            if(AddResult != null)
+                        if (AddResult != null)
+                        {
+                            var SaveResult = context.SaveChangesAsync().IsCompletedSuccessfully;
+                            if (SaveResult)
                             {
-                                var SaveResult = context.SaveChangesAsync().IsCompletedSuccessfully;
-                                if(SaveResult)
-                                {
-                                    response.MessageHandler(5);
-                                }
-                                else
-                                {
-                                    response.MessageHandler(4);
-                                }
+                                response.MessageHandler(5);
                             }
                             else
                             {
                                 response.MessageHandler(4);
                             }
-
-                    }
+                        }/*
+                        else
+                        {
+                            response.MessageHandler(4);
+                        }*/
+                    //}
                     else
                     {
                         response.MessageHandler(3);
@@ -80,11 +81,10 @@ namespace IDS_Integrador.Controllers
                 }
                 else
                 {
-                    if(IsNameValid) {response.MessageHandler(1);}
-                    if(IsUrlValid) {response.MessageHandler(2);}
+                    if (!IsNameValid) { response.MessageHandler(1); }
+                    if (!IsUrlValid) { response.MessageHandler(2); }
                 }
             }
-           
             return response;
         }
 

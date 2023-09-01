@@ -32,12 +32,26 @@ namespace IDS_Integrador.Controllers
 
             if (ModelState.IsValid)
             {
-                
+                User? user = await UserManager.FindByNameAsync(model.Username);
+
+                if(user != null)
+                {
+                    var result = await SignInManager.PasswordSignInAsync(user,model.Password,false,false);
+                    if(result.Succeeded)
+                    {
+                        response.MessageHandler(3);
+                        response.JWT = await SignInManager.UserManager.GenerateUserTokenAsync(user,"abc","auth"); 
+                    }
+                }
+
+                else
+                {
+                    response.MessageHandler(2);
+                }
             }
             else
             {
                 HttpContext.Response.StatusCode = 422;
-                response.StateExecution = false;
                 response.MessageHandler(0);
             }
 

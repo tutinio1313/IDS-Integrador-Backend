@@ -8,12 +8,17 @@ namespace IDS_Integrador.Model.Response.User
         {
             ModelIsNotValid,
             TheEmailIsNotRegistered,
-            TheUsernameIsNotRegistered
+            TheUsernameIsNotRegistered,
+            LoginSuccessful
 
         }
 
+        public string? JWT {get; set;} = string.Empty;
+
         public void MessageHandler(int ErrorValue)
         {
+            StateExecution = ErrorValue == (int) ErrorTypes.LoginSuccessful;
+
             switch(ErrorValue)
             {
                 case (int) ErrorTypes.ModelIsNotValid:
@@ -26,6 +31,10 @@ namespace IDS_Integrador.Model.Response.User
 
                 case (int) ErrorTypes.TheUsernameIsNotRegistered:
                 Messages.Add("¡El payload no esta registrado!");
+                break;
+
+                case (int) ErrorTypes.LoginSuccessful:
+                Messages.Add("¡Se ha ingresado correctamente!");
                 break;
             }
         }          

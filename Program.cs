@@ -6,8 +6,20 @@ using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using System.Security.Claims;
 
+string  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors
+                    (
+                        options =>
+                            {
+                                options.AddPolicy(MyAllowSpecificOrigins, policy => 
+                                    {
+                                        policy.WithOrigins("http://localhost:5173/");
+                                    }
+                                );
+                            }    
+                    );
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -58,7 +70,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
