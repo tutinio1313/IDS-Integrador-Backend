@@ -23,15 +23,14 @@ namespace IDS_Integrador.Controllers
         {
             GetTeamsResponse response = new();
 
-            if (context.Teams.Count() > 0)
+            if (context.Teams.Any())
             {
                 response.Teams = context.Teams.ToList();
-                response.MessageHandler(1);
+                response.MessageHandler(0);
             }
             else
             {
-                response.StateExecution = false;
-                response.MessageHandler(0);
+                response.MessageHandler(1);
             }
             return response;
         }
@@ -40,17 +39,16 @@ namespace IDS_Integrador.Controllers
         public async Task<PostTeamResponse> Post(TeamPostModel model)
         {
             PostTeamResponse response = new();
-            response.Messages.Add("a");
             if (ModelState.IsValid)
             {
-                response.Messages.Add("b");
                 bool IsNameValid = !String.IsNullOrEmpty(model.Name);
                 bool IsUrlValid = !String.IsNullOrEmpty(model.UrlImage);
 
                 if (IsNameValid && IsUrlValid)
                 {
-                    //if (context.Teams.Where(x => x.Name.ToLower() == model.Name.ToLower()).Count().Equals(0))
-                    //{
+                    bool IsTheTeamNotLoaded = !context.Teams.Where(x => x.Name.ToLower() == model.Name.ToLower()).Any();                    
+                    if (IsTheTeamNotLoaded)
+                    {
                         Team team = new();
                         team.IDTeam =  (context.Teams.Count() + 1).ToString();
                         team.Name = model.Name;
@@ -62,18 +60,18 @@ namespace IDS_Integrador.Controllers
                             var SaveResult = context.SaveChangesAsync().IsCompletedSuccessfully;
                             if (SaveResult)
                             {
-                                response.MessageHandler(5);
+                                response.MessageHandler(0);
                             }
                             else
                             {
                                 response.MessageHandler(4);
                             }
-                        }/*
+                        }
                         else
                         {
                             response.MessageHandler(4);
-                        }*/
-                    //}
+                        }
+                    }
                     else
                     {
                         response.MessageHandler(3);

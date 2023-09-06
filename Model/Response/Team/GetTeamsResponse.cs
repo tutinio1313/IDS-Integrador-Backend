@@ -7,14 +7,16 @@ namespace IDS_Integrador.Model.Response.Team
     {
         private enum ErrorTypes
         {
-            ThereIsNotTeams,
-            GetSuccesfullyTeam
+            ThereIsNotTeams = 1,
+            GetSuccesfullyTeam = 0
         }
 
         public List<IDS_Integrador.Model.Entity.Team.Team>? Teams {get;set;}
 
         public void MessageHandler(int ErrorValue)
         {
+            SetStateExecution(ErrorValue);
+
             switch(ErrorValue)
             {
                 case (int) ErrorTypes.ThereIsNotTeams:
@@ -23,10 +25,24 @@ namespace IDS_Integrador.Model.Response.Team
                 break;
 
                 case (int) ErrorTypes.GetSuccesfullyTeam:
-                Messages.Add("Los archivos se entregaron correctamente");
+                Messages.Add("Los equipos se entregaron correctamente.");
                 StateExecution = true;
                 break;
             }
-        }          
+        }
+
+        private void SetStateExecution(int value)
+        {
+            bool IsValueOnErrorRange = value.Equals(1);
+            if(IsValueOnErrorRange)
+            {
+                StateExecution = false;
+            }
+            
+            else
+            {
+                StateExecution = true;
+            }
+        }                
     }
 }

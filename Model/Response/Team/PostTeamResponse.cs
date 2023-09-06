@@ -7,11 +7,12 @@ namespace IDS_Integrador.Model.Response.Team
     {
         private enum ErrorTypes
         {
-            TheNameIsNotValid,
-            TheURLIsNotValid,
-            TheTeamAlreadyExists,
-            SomethingWentWrong,
-            TeamPostedSuccesfully
+            TeamPostedSuccesfully = 0,
+            TheNameIsNotValid = 1,
+            TheURLIsNotValid = 2,
+            TheTeamAlreadyExists = 3,
+            SomethingWentWrong = 4,
+            
             
 
         }
@@ -24,6 +25,9 @@ namespace IDS_Integrador.Model.Response.Team
             
             switch(value)
             {
+                case (int) ErrorTypes.TeamPostedSuccesfully:
+                Messages.Add("¡Se ha guardado correctamente!");
+                break;
                 case (int) ErrorTypes.TheNameIsNotValid:
                 Messages.Add("¡El nombre no es valido!");
                 break;
@@ -33,14 +37,16 @@ namespace IDS_Integrador.Model.Response.Team
                 case (int) ErrorTypes.TheTeamAlreadyExists:
                 Messages.Add("¡El equipo que se ingresó ya existe!");
                 break;
-
+                case (int) ErrorTypes.SomethingWentWrong:
+                Messages.Add("¡Algo salio mal guardando el equipo!");
+                break;
             }
         }    
 
         private void SetStateExecution(int value)
         {
-            bool IsValueOnErrorRange = value >= 0 && value < 4;
-            if(IsValueOnErrorRange)
+            bool IsValueSuccesfull = value.Equals(0);
+            if(IsValueSuccesfull)
             {
                 StateExecution = false;
             }
