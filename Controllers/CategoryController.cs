@@ -48,9 +48,11 @@ namespace IDS_Integrador.Controllers
 
                     if(!WasCategoryLoadedPreviously)
                     {
-                        Category category = new();
-                        category.Name = model.Name;
-                        category.IdCategory = (context.Categories.Count() + 1).ToString();
+                        Category category = new()
+                        {
+                            Name = model.Name,
+                            IdCategory = (context.Categories.Count() + 1).ToString()
+                        };
 
                         await context.Categories.AddAsync(category);
                         context.SaveChanges();

@@ -53,9 +53,15 @@ namespace IDS_Integrador.Controllers
                         if (category != null && team != null)
                         {
 
-                            Player player = new();
-
-                            player.IDPlayer = model.ID;
+                            Player player = new()
+                            {
+                                IDPlayer = model.ID,
+                                Birthday = model.Birthday,
+                                Name = model.Name,
+                                Lastname = model.Lastname,
+                                Category = category,
+                                Team = team                                
+                            };
 
 
 

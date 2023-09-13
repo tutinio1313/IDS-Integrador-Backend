@@ -24,11 +24,11 @@ namespace IDS_Integrador.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
         }
-        
-        private async Task<string> GenerateWebToken(User user) => await UserManager.GenerateUserTokenAsync(user,key,"login");           
+
+        private async Task<string> GenerateWebToken(User user) => await UserManager.GenerateUserTokenAsync(user, key, "login");
 
 
-        private async Task<bool> ValidateWebToken(User user, string token) => await UserManager.VerifyUserTokenAsync(user, key,"login", token);
+        private async Task<bool> ValidateWebToken(User user, string token) => await UserManager.VerifyUserTokenAsync(user, key, "login", token);
 
         [HttpPost]
         [Route("/User/Login")]
@@ -40,13 +40,13 @@ namespace IDS_Integrador.Controllers
             {
                 User? user = await UserManager.FindByNameAsync(model.Username);
 
-                if(user != null)
+                if (user != null)
                 {
-                    var result = await SignInManager.PasswordSignInAsync(user,model.Password,false,false);
-                    if(result.Succeeded)
+                    var result = await SignInManager.PasswordSignInAsync(user, model.Password, false, false);
+                    if (result.Succeeded)
                     {
                         response.MessageHandler(3);
-                        response.JWT = await GenerateWebToken(user); 
+                        response.JWT = await GenerateWebToken(user);
                     }
                 }
 
@@ -73,11 +73,9 @@ namespace IDS_Integrador.Controllers
 
             if (ModelState.IsValid)
             {
-                
-
                 if (response.Messages.Count is not 0)
                 {
-                    
+
                 }
 
                 else
@@ -105,7 +103,7 @@ namespace IDS_Integrador.Controllers
             if (ModelState.IsValid)
             {
 
-                User? IsEmailAvailable = await UserManager.FindByEmailAsync(model.Email);;
+                User? IsEmailAvailable = await UserManager.FindByEmailAsync(model.Email); ;
                 User? IsUsernameAvailable = await UserManager.FindByNameAsync(model.Username);
 
                 if (IsEmailAvailable == null && IsUsernameAvailable == null)
@@ -120,7 +118,7 @@ namespace IDS_Integrador.Controllers
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         response.StateExecution = true;
                         response.MessageHandler(5);

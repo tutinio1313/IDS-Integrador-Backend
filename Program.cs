@@ -29,7 +29,7 @@ MariaDbServerVersion version = new(new Version(10, 6, 12));
 
 builder.Services.AddDbContext<IDSBContext>
     (
-        contextOptions => contextOptions.UseMySql(builder.Configuration["ConnectionStrings:Laptop"], version)
+        contextOptions => contextOptions.UseMySql(builder.Configuration["ConnectionStrings:Desktop"], version)
                     .LogTo(Console.WriteLine, LogLevel.Information)
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors()
@@ -37,7 +37,7 @@ builder.Services.AddDbContext<IDSBContext>
 
     builder.Services.AddDbContext<TeamContext>
     (
-        contextOptions => contextOptions.UseMySql(builder.Configuration["ConnectionStrings:Laptop"], version)
+        contextOptions => contextOptions.UseMySql(builder.Configuration["ConnectionStrings:Desktop"], version)
                     .LogTo(Console.WriteLine, LogLevel.Information)
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors()
