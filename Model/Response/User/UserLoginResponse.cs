@@ -6,10 +6,10 @@ namespace IDS_Integrador.Model.Response.User
     {
         private enum ErrorTypes
         {
+            LoginSuccessful = 1,
             ModelIsNotValid,
             TheEmailIsNotRegistered,
-            TheUsernameIsNotRegistered,
-            LoginSuccessful
+            TheUsernameIsNotRegistered
 
         }
 

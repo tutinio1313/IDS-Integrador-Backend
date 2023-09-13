@@ -16,6 +16,7 @@ namespace IDS_Integrador.Controllers
 
         private readonly ILogger<UserController> _logger;
         private UserManager<User> UserManager;
+        private string key = "817c7a98281fcf4b90a23ce14ea5059f";
         private SignInManager<User> SignInManager;
         public UserController(ILogger<UserController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -23,6 +24,11 @@ namespace IDS_Integrador.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
         }
+        
+        private async Task<string> GenerateWebToken(User user) => await UserManager.GenerateUserTokenAsync(user,key,"login");           
+
+
+        private async Task<bool> ValidateWebToken(User user, string token) => await UserManager.VerifyUserTokenAsync(user, key,"login", token);
 
         [HttpPost]
         [Route("/User/Login")]
@@ -40,7 +46,7 @@ namespace IDS_Integrador.Controllers
                     if(result.Succeeded)
                     {
                         response.MessageHandler(3);
-                        response.JWT = await SignInManager.UserManager.GenerateUserTokenAsync(user,"abc","auth"); 
+                        response.JWT = await GenerateWebToken(user); 
                     }
                 }
 
@@ -71,20 +77,18 @@ namespace IDS_Integrador.Controllers
 
                 if (response.Messages.Count is not 0)
                 {
-
+                    
                 }
 
                 else
                 {
                     HttpContext.Response.StatusCode = 200;
-                    response.StateExecution = true;
 
                 }
             }
             else
             {
                 HttpContext.Response.StatusCode = 422;
-                response.StateExecution = false;
                 response.MessageHandler(0);
             }
 
