@@ -44,27 +44,37 @@ namespace IDS_Integrador.Controllers
             {
                 if (ModelIsValid(model))
                 {
-                    Team HomeTeam = context.Teams.First(x => x.IDTeam == model.IDHomeTeam);
-                    Team VisitorTeam = context.Teams.First(x => x.IDTeam == model.IDVisitorTeam);
-
-                    bool CanPost = FoundMatches(HomeTeam, VisitorTeam, model.Date);
-
-                    
-                    if (CanPost)
+                    bool TeamsAreDifferent = model.IDHomeTeam != model.IDVisitorTeam;
+                    if (TeamsAreDifferent)
                     {
-                        Match match = new()
-                        {
-                            IDMatch = (context.Matches.Count() + 1).ToString(),
-                            LocalTeam = HomeTeam,
-                            VisitTeam = VisitorTeam,
-                            Date = model.Date
-                        };
+                        Team HomeTeam = context.Teams.First(x => x.IDTeam == model.IDHomeTeam);
+                        Team VisitorTeam = context.Teams.First(x => x.IDTeam == model.IDVisitorTeam);
 
-                        await context.Matches.AddAsync(match);
-                        await context.SaveChangesAsync();
-                        response.MessageHandler(0);
-                        response.Match = match;
+
+                        bool CanPost = FoundMatches(HomeTeam, VisitorTeam, model.Date);
+
+
+                        if (CanPost)
+                        {
+                            Match match = new()
+                            {
+                                IDMatch = (context.Matches.Count() + 1).ToString(),
+                                LocalTeam = HomeTeam,
+                                VisitTeam = VisitorTeam,
+                                Date = model.Date
+                            };
+
+                            await context.Matches.AddAsync(match);
+                            await context.SaveChangesAsync();
+                            response.MessageHandler(0);
+                            response.Match = match;
+                        }
+                        else
+                        {
+                            response.MessageHandler(3);
+                        }
                     }
+
                     else
                     {
                         response.MessageHandler(2);
