@@ -80,14 +80,14 @@ app.UseAuthentication();
 
 app.MapControllers();
 
-bool dbChanges = false;
+bool[] dbChanges = new bool[3] {false,false,false};
 
 PopulateDB.LoadContext(app);
-//dbChanges = await PopulateDB.LoadCategories();
-//dbChanges = await PopulateDB.LoadTeams();
-dbChanges = await PopulateDB.LoadPlayers();
+dbChanges[0] = await PopulateDB.LoadCategories();
+dbChanges[1] = await PopulateDB.LoadTeams();
+dbChanges[2] = await PopulateDB.LoadPlayers();
 
-if(dbChanges){
+if(dbChanges.Any(x => x == true)){
     PopulateDB.SaveChangesAsync();
 }
 
