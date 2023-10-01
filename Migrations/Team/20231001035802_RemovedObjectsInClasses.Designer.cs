@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IDS_Integrador.Migrations.Team
 {
     [DbContext(typeof(TeamContext))]
-    [Migration("20231001035059_RemovedObejctsIntoClasses")]
-    partial class RemovedObejctsIntoClasses
+    [Migration("20231001035802_RemovedObjectsInClasses")]
+    partial class RemovedObjectsInClasses
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
