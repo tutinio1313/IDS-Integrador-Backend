@@ -12,7 +12,8 @@ namespace IDS_Integrador.Model.Response.Player
             PlayerIDWasLoadedPreviously = 2,
             CategoryNotFound = 3,
             TeamNotFound = 4,
-            SomethingWentWrong = 5
+            SomethingWentWrong = 5,
+            DorsalIsNotAvailable = 6
 
         }
         
@@ -49,7 +50,10 @@ namespace IDS_Integrador.Model.Response.Player
                 case (int) ErrorTypes.SomethingWentWrong:
                 Messages.Add("Algo salio mal en el servidor");
                 break;
-
+                
+                case (int) ErrorTypes.DorsalIsNotAvailable:
+                Messages.Add("El numero de camiseta para este club no esta disponible.");
+                break;
             }
         }             
     }

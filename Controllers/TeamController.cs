@@ -49,10 +49,12 @@ namespace IDS_Integrador.Controllers
                     bool IsTheTeamNotLoaded = !context.Teams.Where(x => x.Name.ToLower() == model.Name.ToLower()).Any();                    
                     if (IsTheTeamNotLoaded)
                     {
-                        Team team = new();
-                        team.IDTeam =  (context.Teams.Count() + 1).ToString();
-                        team.Name = model.Name;
-                        team.UrlImage = model.UrlImage;
+                        Team team = new()
+                        {
+                            IDTeam = context.Teams.Count() + 1,
+                            Name = model.Name,
+                            UrlImage = model.UrlImage
+                        };
                         var AddResult = await context.Teams.AddAsync(team);
 
                         if (AddResult != null)

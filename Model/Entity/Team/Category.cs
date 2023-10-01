@@ -8,7 +8,7 @@ namespace IDS_Integrador.Model.Entity.Team
     public class Category
     {
         [Key]
-        public string IdCategory { get; set;} = string.Empty;
+        public int IdCategory { get; set;}
         public string Name {get; set;} = string.Empty;
     }
 }

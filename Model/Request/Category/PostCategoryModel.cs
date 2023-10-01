@@ -9,6 +9,6 @@ namespace IDS_Integrador.Model.Request.Category
     {
         [Required(ErrorMessage ="No has ingresado el nombre del equipo.")]
         [DataType(DataType.Text)]
-        public string Name {get;set;} = string.Empty;
+        public string name {get;set;} = string.Empty;
     }
 }

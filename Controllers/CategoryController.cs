@@ -42,16 +42,16 @@ namespace IDS_Integrador.Controllers
             PostCategoryResponse response = new();
             if (ModelState.IsValid)
             {
-                if(!model.Name.IsNullOrEmpty())
+                if(!model.name.IsNullOrEmpty())
                 {
-                    bool WasCategoryLoadedPreviously = context.Categories.Any(x => x.Name == model.Name);
+                    bool WasCategoryLoadedPreviously = context.Categories.Any(x => x.Name == model.name);
 
                     if(!WasCategoryLoadedPreviously)
                     {
                         Category category = new()
                         {
-                            Name = model.Name,
-                            IdCategory = (context.Categories.Count() + 1).ToString()
+                            Name = model.name,
+                            IdCategory = context.Categories.Count() + 1
                         };
 
                         await context.Categories.AddAsync(category);

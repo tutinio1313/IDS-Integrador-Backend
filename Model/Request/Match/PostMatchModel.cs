@@ -9,14 +9,17 @@ namespace IDS_Integrador.Model.Request.Match
     {
         [Required(ErrorMessage ="No has ingresado el equipo local.")]
         [DataType(DataType.Text)]
-        public string IDHomeTeam {get;set;} = string.Empty;
+        public int IDHomeTeam {get;set;}
 
         [Required(ErrorMessage ="No has ingresado el equipo local.")]
         [DataType(DataType.Text)]
-        public string IDVisitorTeam {get;set;} = string.Empty;
+        public int IDVisitorTeam {get;set;}
 
         [Required(ErrorMessage = "No has ingresado la fecha y hora del partido.")]
         [DataType(DataType.DateTime)]
         public DateTime Date {get; set;}
+
+        [Required(ErrorMessage = "No has ingresado la fecha y hora del partido.")]
+        public int IDCategory {get; set;}
     }
 }

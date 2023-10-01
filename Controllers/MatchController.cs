@@ -49,19 +49,20 @@ namespace IDS_Integrador.Controllers
                     {
                         Team HomeTeam = context.Teams.First(x => x.IDTeam == model.IDHomeTeam);
                         Team VisitorTeam = context.Teams.First(x => x.IDTeam == model.IDVisitorTeam);
+                        Category category = context.Categories.First(x => x.IdCategory == model.IDCategory);
 
-
-                        bool CanPost = FoundMatches(HomeTeam, VisitorTeam, model.Date);
+                        bool CanPost = FoundMatches(HomeTeam, VisitorTeam, model.Date,category);
 
 
                         if (CanPost)
                         {
                             Match match = new()
                             {
-                                IDMatch = (context.Matches.Count() + 1).ToString(),
-                                LocalTeam = HomeTeam,
-                                VisitTeam = VisitorTeam,
-                                Date = model.Date
+                                IDMatch = context.Matches.Count() + 1,
+                                LocalTeamID = HomeTeam.IDTeam,
+                                VisitorTeamID = VisitorTeam.IDTeam,
+                                Date = model.Date,
+                                category = category
                             };
 
                             await context.Matches.AddAsync(match);
@@ -89,18 +90,19 @@ namespace IDS_Integrador.Controllers
         }
 
         private bool ModelIsValid(PostMatchModel model) => !(
-                                                             model.IDHomeTeam.IsNullOrEmpty()
-                                                          && model.IDVisitorTeam.IsNullOrEmpty()
+                                                             model.IDHomeTeam.Equals(0)
+                                                          && model.IDVisitorTeam.Equals(0)
                                                           && model.Date < DateTime.Now
                                                             );
 
-        private bool FoundMatches(Team Home, Team Visitor, DateTime Date)
+        private bool FoundMatches(Team Home, Team Visitor, DateTime Date, Category category)
         {
-            List<Match> Matches = context.Matches.Where(x => x.LocalTeam == Home).ToList();
-            Matches = Matches.Where(x => x.VisitTeam == Visitor).ToList();
+            List<Match> Matches = context.Matches.Where(x => x.LocalTeamID == Home.IDTeam).ToList();
+            Matches = Matches.Where(x => x.VisitorTeamID == Visitor.IDTeam).ToList();
             Matches = Matches.Where(x => x.Date == Date).ToList();
+            Matches = Matches.Where(x => x.category == category).ToList();
 
-            return Matches.Count == 0;
+            return Matches.Any();
         }
 
     }

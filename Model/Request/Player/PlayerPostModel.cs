@@ -8,10 +8,13 @@ namespace IDS_Integrador.Model.Request.Player
     public class PlayerPostModel
     {
         [Required(ErrorMessage ="No has ingresado el DNI del jugador.")]
-        public string ID {get;set;} = string.Empty;
+        public int ID {get;set;}
         [Required(ErrorMessage ="No has ingresado el nombre del jugador.")]
         [DataType(DataType.Text)]
         public string Name {get;set;} = string.Empty;
+        [Required(ErrorMessage ="No has ingresado el nombre del jugador.")]
+        [DataType(DataType.Text)]
+        public string Dorsal {get;set;} = string.Empty;
 
         [Required(ErrorMessage ="No has ingresado el apellido del jugador.")]
         [DataType(DataType.Text)]
@@ -21,11 +24,11 @@ namespace IDS_Integrador.Model.Request.Player
         public DateOnly Birthday { get; set;}
 
         [Required(ErrorMessage = "No has ingresado el club del jugador.")]
-        [DataType(DataType.Date)]
-        public string IDTeam { get; set;} = string.Empty;
+        [DataType(DataType.Text)]
+        public int IDTeam { get; set;}
 
         [Required(ErrorMessage = "No has ingresado la categoria del jugador.")]
-        [DataType(DataType.Date)]
-        public string IDCategory {get; set;} = string.Empty;
+        [DataType(DataType.Text)]
+        public int IDCategory {get; set;}
     }
 }

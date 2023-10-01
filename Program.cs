@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using IDS_Integrador.Model.Entity;
 using IDS_Integrador.Database;
+using IDS_Integrador.Database.Test;
 
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
@@ -79,5 +80,15 @@ app.UseAuthentication();
 
 app.MapControllers();
 
+bool dbChanges = false;
+
+PopulateDB.LoadContext(app);
+//dbChanges = await PopulateDB.LoadCategories();
+//dbChanges = await PopulateDB.LoadTeams();
+dbChanges = await PopulateDB.LoadPlayers();
+
+if(dbChanges){
+    PopulateDB.SaveChangesAsync();
+}
 
 app.Run();

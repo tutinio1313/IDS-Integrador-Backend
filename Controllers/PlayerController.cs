@@ -52,32 +52,40 @@ namespace IDS_Integrador.Controllers
 
                         if (category != null && team != null)
                         {
-
-                            Player player = new()
+                            bool IsDorsalAvailable = !context.Players.Where(x => x.TeamID == model.IDTeam).Where(x => x.Dorsal == model.Dorsal).Any();
+                            if (IsDorsalAvailable)
                             {
-                                IDPlayer = model.ID,
-                                Birthday = model.Birthday,
-                                Name = model.Name,
-                                Lastname = model.Lastname,
-                                Category = category,
-                                Team = team                                
-                            };
+
+                                Player player = new()
+                                {
+                                    IDPlayer = model.ID,
+                                    Birthday = model.Birthday,
+                                    Dorsal = model.Dorsal,
+                                    Name = model.Name,
+                                    Lastname = model.Lastname,
+                                    CategoryID = category.IdCategory,
+                                    TeamID = team.IDTeam
+                                };
 
 
 
-                            var AddResult = await context.Players.AddAsync(player);
+                                var AddResult = await context.Players.AddAsync(player);
 
-                            if (AddResult != null)
-                            {
-                                await context.SaveChangesAsync();
-                                response.MessageHandler(0);
-                                response.Player = player;
+                                if (AddResult != null)
+                                {
+                                    await context.SaveChangesAsync();
+                                    response.MessageHandler(0);
+                                    response.Player = player;
 
 
+                                }
+                                else
+                                {
+                                    response.MessageHandler(5);
+                                }
                             }
-                            else
-                            {
-                                response.MessageHandler(5);
+                            else{
+                                response.MessageHandler(6);
                             }
                         }
                         else
@@ -103,8 +111,8 @@ namespace IDS_Integrador.Controllers
         private bool ModelIsValid(PlayerPostModel model) => !(
                                                              model.Name.IsNullOrEmpty()
                                                           && model.Lastname.IsNullOrEmpty()
-                                                          && model.IDCategory.IsNullOrEmpty()
-                                                          && model.IDCategory.IsNullOrEmpty()
+                                                          && model.IDCategory.Equals(0)
+                                                          && model.IDTeam.Equals(0)
                                                             );
 
     }
