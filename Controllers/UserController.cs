@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 using IDS_Integrador.Database;
 using IDS_Integrador.Model.Entity;
 using IDS_Integrador.Model.Response.User;
 using IDS_Integrador.Model.Request.User;
-using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace IDS_Integrador.Controllers
 {
@@ -15,24 +18,40 @@ namespace IDS_Integrador.Controllers
     {
 
         private readonly ILogger<UserController> _logger;
-        private UserManager<User> UserManager;
-        private string key = "817c7a98281fcf4b90a23ce14ea5059f";
-        private SignInManager<User> SignInManager;
-        public UserController(ILogger<UserController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
+        private const string key = "817c7a98281fcf4b90a23ce14ea5059f";
+        private readonly SignInManager<User> SignInManager;
+        private readonly UserManager<User> UserManager;
+        private readonly RoleManager<Role> RoleManager;
+        public UserController(ILogger<UserController> logger, UserManager<User> UserManager, SignInManager<User> SignInManager, RoleManager<Role> RoleManager)
         {
             _logger = logger;
-            UserManager = userManager;
-            SignInManager = signInManager;
+            this.UserManager = UserManager;
+            this.SignInManager = SignInManager;
+            this.RoleManager = RoleManager;
         }
 
-        private async Task<string> GenerateWebToken(User user) => await UserManager.GenerateUserTokenAsync(user, key, "login");
+        private async Task<string> GenerateWebToken(User User) {
+         JwtSecurityTokenHandler TokenHandler = new();
+            byte[] Key = System.Text.Encoding.ASCII.GetBytes("Tm8gZ29vZCBmb3IgdGhpcyBodW1hbml0eQ==");
+            SecurityTokenDescriptor tokenDescriptor = new()
+            {
+                Subject = new ClaimsIdentity(new Claim[] 
+                {
+                    new(ClaimTypes.Name, User.Id)
+                    //,new(ClaimTypes.Role, Role.Name)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new(new SymmetricSecurityKey(Key), SecurityAlgorithms.HmacSha256Signature)
+            };
+        SecurityToken Token = TokenHandler.CreateToken(tokenDescriptor);
+        User.TokenAccess = TokenHandler.WriteToken(Token);
+        return User.TokenAccess;
+        }
 
-
-        private async Task<bool> ValidateWebToken(User user, string token) => await UserManager.VerifyUserTokenAsync(user, key, "login", token);
 
         [HttpPost]
         [Route("/User/Login")]
-        public async Task<UserLoginResponse> Login(UserLoginModel model)
+        public async Task<UserLoginResponse> Login([FromBody]UserLoginModel model)
         {
             UserLoginResponse response = new();
 
@@ -46,7 +65,7 @@ namespace IDS_Integrador.Controllers
                     if (result.Succeeded)
                     {
                         response.MessageHandler(3);
-                        response.JWT = await GenerateWebToken(user);
+                        response.Token = await GenerateWebToken(user);
                     }
                 }
 
@@ -66,23 +85,14 @@ namespace IDS_Integrador.Controllers
         }
         [HttpPost]
         [Route("/User/LoginKey")]
-        public async Task<UserLoginResponse> LoginThroughKey(UserLoginKeyModel model)
+        public async Task<UserLoginResponse> LoginThroughKey([FromBody]UserLoginKeyModel model)
         {
             UserLoginResponse response = new();
 
 
             if (ModelState.IsValid)
-            {
-                if (response.Messages.Count is not 0)
-                {
-
-                }
-
-                else
-                {
-                    HttpContext.Response.StatusCode = 200;
-
-                }
+            {            
+                
             }
             else
             {
@@ -97,7 +107,7 @@ namespace IDS_Integrador.Controllers
 
         [HttpPost]
         [Route("/User/Register")]
-        public async Task<UserRegisterResponse> Register(UserRegisterModel model)
+        public async Task<UserRegisterResponse> Register([FromBody]UserRegisterModel model)
         {
             UserRegisterResponse response = new();
             if (ModelState.IsValid)

@@ -7,5 +7,6 @@ namespace IDS_Integrador.Model.Entity
     {
         public string Name {get; set;} = String.Empty;
         public string Lastname {get; set;} = String.Empty;
+        public string? TokenAccess {get;set;}
     }
 }

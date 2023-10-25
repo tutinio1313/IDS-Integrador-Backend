@@ -36,7 +36,7 @@ namespace IDS_Integrador.Controllers
         }
 
         [HttpPost]
-        public async Task<PostTeamResponse> Post(TeamPostModel model)
+        public async Task<PostTeamResponse> Post([FromBody] TeamPostModel model)
         {
             PostTeamResponse response = new();
             if (ModelState.IsValid)

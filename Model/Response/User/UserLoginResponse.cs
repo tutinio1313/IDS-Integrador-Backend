@@ -13,7 +13,7 @@ namespace IDS_Integrador.Model.Response.User
 
         }
 
-        public string? JWT {get; set;} = string.Empty;
+        public string? Token {get; set;} = string.Empty;
 
         public void MessageHandler(int ErrorValue)
         {

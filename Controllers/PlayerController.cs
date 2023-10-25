@@ -37,7 +37,7 @@ namespace IDS_Integrador.Controllers
         }
 
         [HttpPost]
-        public async Task<PostPlayerResponse> Post(PlayerPostModel model)
+        public async Task<PostPlayerResponse> Post([FromBody] PlayerPostModel model)
         {
             PostPlayerResponse response = new();
             if (ModelState.IsValid)

@@ -14,6 +14,7 @@ namespace IDS_Integrador.Model.Response.User
 
         public void MessageHandler(int ErrorValue)
         {
+            StateExecution = ErrorValue == 3;
             switch(ErrorValue)
             {
                 case (int) ErrorTypes.ModelIsNotValid:
@@ -28,7 +29,7 @@ namespace IDS_Integrador.Model.Response.User
                 Messages.Add("¡El usuario ya se ha registrado previamente!");
                 break;
 
-                default:
+                case (int) ErrorTypes.RegisteredSuccesful:
                 Messages.Add("¡El usuario se ha registrado satisfactoriamente!");
                 break;
             }

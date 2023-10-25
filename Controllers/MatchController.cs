@@ -37,7 +37,7 @@ namespace IDS_Integrador.Controllers
         }
 
         [HttpPost]
-        public async Task<PostMatchResponse> Post(PostMatchModel model)
+        public async Task<PostMatchResponse> Post([FromBody]PostMatchModel model)
         {
             PostMatchResponse response = new();
             if (ModelState.IsValid)
