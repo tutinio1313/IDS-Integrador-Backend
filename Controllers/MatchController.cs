@@ -20,7 +20,7 @@ namespace IDS_Integrador.Controllers
 
 
         [HttpGet]
-        public GetMatchResponse GetTeams()
+        public GetMatchResponse Get()
         {
             GetMatchResponse response = new();
 

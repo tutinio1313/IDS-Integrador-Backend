@@ -19,7 +19,7 @@ namespace IDS_Integrador.Model.Request.Match
         [DataType(DataType.DateTime)]
         public DateTime Date {get; set;}
 
-        [Required(ErrorMessage = "No has ingresado la fecha y hora del partido.")]
+        [Required(ErrorMessage = "No has ingresado la categoria.")]
         public int IDCategory {get; set;}
     }
 }

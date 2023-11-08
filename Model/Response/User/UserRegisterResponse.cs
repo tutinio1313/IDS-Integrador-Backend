@@ -4,17 +4,18 @@ namespace IDS_Integrador.Model.Response.User
 {
     public class UserRegisterResponse : Response
     {
-        private enum ErrorTypes
+        public enum ErrorTypes
         {
             ModelIsNotValid,
             TheEmailIsNotAvailable,
             TheUsernameIsNotAvailable,
-            RegisteredSuccesful
+            RegisteredSuccesful,
+            CantRegistered
         }
 
         public void MessageHandler(int ErrorValue)
         {
-            StateExecution = ErrorValue == 3;
+            StateExecution = ErrorValue == (int) UserRegisterResponse.ErrorTypes.RegisteredSuccesful;
             switch(ErrorValue)
             {
                 case (int) ErrorTypes.ModelIsNotValid:
@@ -31,6 +32,14 @@ namespace IDS_Integrador.Model.Response.User
 
                 case (int) ErrorTypes.RegisteredSuccesful:
                 Messages.Add("¡El usuario se ha registrado satisfactoriamente!");
+                break;
+
+                case (int) ErrorTypes.CantRegistered:
+                Messages.Add("¡No se pudo registrar!");
+                break;
+
+                default:
+                Messages.Add("¡Ooops algo ha salido mal");
                 break;
             }
         }         

@@ -3,6 +3,7 @@ using System;
 using IDS_Integrador.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IDS_Integrador.Migrations
 {
     [DbContext(typeof(IDSBContext))]
-    partial class IDSBContextModelSnapshot : ModelSnapshot
+    [Migration("20231103184632_TEst")]
+    partial class TEst
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

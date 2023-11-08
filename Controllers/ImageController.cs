@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using IDS_Integrador.Model.Entity.Photo;
 using IDS_Integrador.Model.Request.Photo;
 using IDS_Integrador.Database;
-
+using IDS_Integrador.Model.Entity;
+using IDS_Integrador.Model.Entity.Photo;
 using IDS_Integrador.Model.Response;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using IDS_Integrador.Model.Response.Photo;
+
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace IDS_Integrador.Controllers

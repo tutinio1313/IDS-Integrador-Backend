@@ -64,20 +64,24 @@ namespace IDS_Integrador.Controllers
                     var result = await SignInManager.PasswordSignInAsync(user, model.Password, false, false);
                     if (result.Succeeded)
                     {
-                        response.MessageHandler(3);
+                        response.MessageHandler((int) UserLoginResponse.ErrorTypes.LoginSuccessful);
                         response.Token = await GenerateWebToken(user);
+                    }
+                    else
+                    {
+                        response.MessageHandler((int) UserLoginResponse.ErrorTypes.PasswordNotValid);
                     }
                 }
 
                 else
                 {
-                    response.MessageHandler(2);
+                    response.MessageHandler((int) UserLoginResponse.ErrorTypes.TheUsernameIsNotRegistered);
                 }
             }
             else
             {
                 HttpContext.Response.StatusCode = 422;
-                response.MessageHandler(0);
+                response.MessageHandler((int) UserLoginResponse.ErrorTypes.ModelIsNotValid);
             }
 
 
@@ -112,11 +116,10 @@ namespace IDS_Integrador.Controllers
             UserRegisterResponse response = new();
             if (ModelState.IsValid)
             {
+                User? Email = await UserManager.FindByEmailAsync(model.Email); ;
+                User? UserName = await UserManager.FindByNameAsync(model.Username);
 
-                User? IsEmailAvailable = await UserManager.FindByEmailAsync(model.Email); ;
-                User? IsUsernameAvailable = await UserManager.FindByNameAsync(model.Username);
-
-                if (IsEmailAvailable == null && IsUsernameAvailable == null)
+                if (Email == null && UserName == null)
                 {
                     User user = new();
 
@@ -125,35 +128,43 @@ namespace IDS_Integrador.Controllers
                     user.Name = model.Name;
                     user.Lastname = model.Lastname;
 
+                    try{
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
                     if (result.Succeeded)
                     {
-                        response.StateExecution = true;
-                        response.MessageHandler(5);
+                        response.MessageHandler((int) UserRegisterResponse.ErrorTypes.RegisteredSuccesful);
                     }
+                    else
+                    {
+                        response.MessageHandler((int) UserRegisterResponse.ErrorTypes.CantRegistered);
+                    }
+                    }
+                    catch (System.Exception)
+                    {
+                        
+                        throw;
+                    }
+                
 
                 }
                 else
                 {
-                    response.StateExecution = false;
-
-                    if (IsEmailAvailable != null)
+                    if (Email == null)
                     {
-                        response.MessageHandler(1);
+                        response.MessageHandler((int) UserRegisterResponse.ErrorTypes.TheEmailIsNotAvailable);
                     }
-                    if (IsUsernameAvailable != null)
+                    if (UserName == null)
                     {
-                        response.MessageHandler(2);
+                        response.MessageHandler((int) UserRegisterResponse.ErrorTypes.TheUsernameIsNotAvailable);
                     }
                 }
             }
             else
             {
                 HttpContext.Response.StatusCode = 422;
-                response.StateExecution = false;
-                response.MessageHandler(0);
+                response.MessageHandler((int) UserRegisterResponse.ErrorTypes.ModelIsNotValid);
             }
             return response;
         }

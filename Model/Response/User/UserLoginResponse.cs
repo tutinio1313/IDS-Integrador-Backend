@@ -4,12 +4,13 @@ namespace IDS_Integrador.Model.Response.User
 {
     public class UserLoginResponse : Response
     {
-        private enum ErrorTypes
+        public enum ErrorTypes
         {
             LoginSuccessful = 1,
             ModelIsNotValid,
             TheEmailIsNotRegistered,
-            TheUsernameIsNotRegistered
+            TheUsernameIsNotRegistered,
+            PasswordNotValid
 
         }
 
@@ -30,11 +31,15 @@ namespace IDS_Integrador.Model.Response.User
                 break;
 
                 case (int) ErrorTypes.TheUsernameIsNotRegistered:
-                Messages.Add("¡El payload no esta registrado!");
+                Messages.Add("¡El usuario no esta registrado!");
                 break;
 
                 case (int) ErrorTypes.LoginSuccessful:
                 Messages.Add("¡Se ha ingresado correctamente!");
+                break;
+
+                case (int) ErrorTypes.PasswordNotValid:
+                Messages.Add("¡La contraseña ingresada no es correcta!");
                 break;
             }
         }          

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using IDS_Integrador.Model.Entity;
 using IDS_Integrador.Database;
 using IDS_Integrador.Database.Test;
+using IDS_Integrador.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
@@ -56,11 +57,13 @@ builder.Services.AddIdentity<User, Role>( options =>
                                             options.Password.RequiredUniqueChars = 0;
                                             options.Password.RequireLowercase = false;
                                             options.Password.RequireUppercase = false;
+                                            options.Password.RequireDigit = false;
                                         })
                                         .AddEntityFrameworkStores<IDSBContext>();
 
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<RoleManager<Role>>();
+builder.Services.AddTransient<IFaceRecognitionService, FaceRecognitionService>();
 
 var app = builder.Build();
 
